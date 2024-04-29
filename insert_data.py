@@ -1,9 +1,8 @@
 import sqlite3
 import os
 
-path = 'H:\\UZH\\Master Project\\Data-Pipeline'
-database_name = 'hate_speech_data.db'
-conn = sqlite3.connect(path + '\\' + database_name)
+import myGlobals
+conn = myGlobals.connect()
 c = conn.cursor()
 
 c.execute("SELECT name FROM sqlite_master WHERE type='table';")
