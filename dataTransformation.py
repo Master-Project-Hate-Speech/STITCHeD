@@ -1,5 +1,11 @@
 import numpy as np
 import pandas as pd
+from readConfig import final_config
+
+config_path = "config.csv"
+data_folder = "./data"
+aaa = final_config(config_path, data_folder)
+
 
 class DataFrameConverter:
     def __init__(self, dataframe, connection):
