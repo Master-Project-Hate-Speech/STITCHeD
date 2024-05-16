@@ -1,17 +1,11 @@
-import numpy as np
 import pandas as pd
-from readConfig import final_config
-
-config_path = "config.csv"
-data_folder = "./data"
-aaa = final_config(config_path, data_folder)
-
 
 class DataFrameConverter:
-    def __init__(self, dataframe, connection):
+    def __init__(self, config_df, dataframe, connection):
         self.df = dataframe
         self.conn = connection
         self.formatted_df = {}
+        self.config = config_df
 
     def format_for_sql(self):
         self.__format_dataset()
@@ -25,13 +19,13 @@ class DataFrameConverter:
         self.dataset_id = self.__get_rowid("dataset")+1
         dataset_data = {
             "dataset_id": [self.dataset_id],
-            'dataset_original_name': ['OLID_2019'],
-            'dataset_name': ['OLID_2019']
+            'dataset_original_name': [self.config['dataset_file_name']],
+            'dataset_name': [self.config['dataset_name']]
         }
         dataset_df = pd.DataFrame(dataset_data)
         self.formatted_df['dataset'] = dataset_df
     def __format_schema(self):
-        self.label_columns = ["subtask_a", "subtask_b", "subtask_c"]
+        self.label_columns = list((self.config['label_name_definition']).keys())
         data = {
             "dataset_id": [self.dataset_id] * len(self.label_columns),  # Repeat dataset_id for each label column
             "label_name": self.label_columns
@@ -42,22 +36,22 @@ class DataFrameConverter:
         self.source_id = self.__get_rowid("text_source")+1
         text_source_data = {
             "source_id": [self.source_id],
-            'source': ['tweet']
+            'source': [self.config['source']]
         }
         text_source_df = pd.DataFrame(text_source_data)
         self.formatted_df['text_source'] = text_source_df
     def __format_language(self):
         self.language_id = self.__get_rowid("language")+1
         language_data = {
-            'language': ['English']
+            'language': [self.config['language']]
         }
         language_df = pd.DataFrame(language_data)
         self.formatted_df['language'] = language_df
     def __format_text(self):
         self.df["dataset_id"] = self.dataset_id
         self.df.rename(columns={'id': 'text_id',
-                   'tweet':'text'
-                   }, inplace=True)
+                    'tweet':'text'
+                    }, inplace=True)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
         table_text['source_id'] = self.source_id
         table_text['language_id'] = self.language_id
