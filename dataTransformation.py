@@ -62,7 +62,7 @@ class DataFrameConverter:
         self.formatted_df['text_source'] = text_source_df
     def __format_language(self):
         if self.config['language'].startswith('@'):
-            language = self.config['source'][1:]
+            language = self.config['language'][1:]
             language_id = self.__search_language_rowid(language)
             language_data = {
                 "language_id": [language_id],
