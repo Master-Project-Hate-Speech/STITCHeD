@@ -13,11 +13,11 @@ create_tables(conn)
 # ## dictionary key:table name; value:df
 # formatted_df = converter.format_for_sql()
 def insert_data(conn, df, table_name):
-    print(f"TABLE {table_name}:\n{df}")
     df.to_sql(table_name, conn, if_exists='append', index=False)
     # try:
     #     df.to_sql(table_name, conn, if_exists='append', index=False)
     # except Exception as e:
+    #     print(f"TABLE {table_name}:\n{df}")
     #     print(e)
 
 # for k,v in formatted_df.items():
@@ -48,9 +48,9 @@ for index, row in config.iterrows():
             formatted_df = converter.format_for_sql()
             first_iter = False
         else:
-            # print(file_name, "else")
-            new_formatted_df = converter.format_for_sql(append=True)
-            formatted_df = {key: pd.concat([formatted_df[key], new_formatted_df[key]], ignore_index=True) for key in formatted_df.keys()}
+            converter.set_df(df)
+            formatted_df = converter.format_for_sql(append=True)
+            # formatted_df = {key: pd.concat([formatted_df[key], new_formatted_df[key]], ignore_index=True) for key in formatted_df.keys()}
         # for table_name, df in formatted_df.items():
             # print(f"TABLE {table_name}:\n{df}")
             # print("\n")

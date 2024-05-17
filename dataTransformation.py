@@ -20,6 +20,8 @@ class DataFrameConverter:
         self.__format_text()
         self.__format_label()
         return self.formatted_df
+    def set_df(self, dataframe):
+        self.df = dataframe
     def __format_dataset(self, append = False):
         dataset_data = {
             "dataset_id": [],
@@ -102,6 +104,8 @@ class DataFrameConverter:
         # maybe can be solved by fetching the MAX text_id for this dataset
         # converter need to "remember" the dataset
         self.df['text_id'] = self.df.index + self.start_text_id
+        # print(self.start_text_id)
+        # print(len(self.df))
         self.start_text_id += len(self.df)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
         table_text['source_id'] = self.max_source_id
