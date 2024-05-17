@@ -85,13 +85,13 @@ class DataFrameConverter:
         text_col = self.config['text']
         self.df.rename(columns={
                     # 'id': 'text_id',
-                    'tweet':text_col
+                    text_col: 'text'
                     }, inplace=True)
         # problem is that for separate files in the same dataset, it cannot be used
         # maybe can be solved by fetching the MAX text_id for this dataset
         # converter need to "remember" the dataset
         self.df['text_id'] = self.df.index + 1
-        table_text = self.df[['dataset_id', 'text_id', text_col]].drop_duplicates()
+        table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
         table_text['source_id'] = self.max_source_id
         table_text['language_id'] = self.max_language_id
         self.formatted_df['text'] = table_text
