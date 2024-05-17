@@ -2,7 +2,6 @@ import pandas as pd
 
 class DataFrameConverter:
     def __init__(self, config_df, dataframe, connection):
-        self.file_idx = 0 #use one instance for separate files
         self.df = dataframe
         self.conn = connection
         self.formatted_df = {}
@@ -11,32 +10,40 @@ class DataFrameConverter:
         self.language_cache = {}
         self.max_source_id = self.__get_rowid('text_source')
         self.max_language_id = self.__get_rowid('language')
+        self.start_text_id = 1
     # enable append mode to use one instance for separate files
     def format_for_sql(self, append = False):
-        self.__format_dataset()
-        self.__format_schema()
+        self.__format_dataset(append = append)
+        self.__format_schema(append = append)
         self.__format_source()
         self.__format_language()
         self.__format_text()
         self.__format_label()
-        if append:
-            self.file_idx += 1
         return self.formatted_df
-    def __format_dataset(self):
-        self.dataset_id = self.__get_rowid("dataset")+1
+    def __format_dataset(self, append = False):
         dataset_data = {
-            "dataset_id": [self.dataset_id],
-            'dataset_original_name': [self.config['dataset_file_name']],
-            'dataset_name': [self.config['dataset_name']]
+            "dataset_id": [],
+            'dataset_original_name': [],
+            'dataset_name': []
         }
+        if not append:
+            self.dataset_id = self.__get_rowid("dataset")+1
+            dataset_data['dataset_id'].append(self.dataset_id)
+            dataset_data['dataset_original_name'].append(self.config['dataset_file_name'])
+            dataset_data['dataset_name'].append(self.config['dataset_name'])
         dataset_df = pd.DataFrame(dataset_data)
         self.formatted_df['dataset'] = dataset_df
-    def __format_schema(self):
-        self.label_columns = list((self.config['label_name_definition']).keys())
+    def __format_schema(self, append = False):
         data = {
-            "dataset_id": [self.dataset_id] * len(self.label_columns),  # Repeat dataset_id for each label column
-            "label_name": self.label_columns
+            "dataset_id": [],
+            "label_name": []
         }
+        if not append:
+            self.label_columns = list((self.config['label_name_definition']).keys())
+            data = {
+                "dataset_id": [self.dataset_id] * len(self.label_columns),  # Repeat dataset_id for each label column
+                "label_name": self.label_columns
+            }
         table_schema = pd.DataFrame(data)
         self.formatted_df['schema'] = table_schema
     def __format_source(self):
@@ -94,7 +101,8 @@ class DataFrameConverter:
         # problem is that for separate files in the same dataset, it cannot be used
         # maybe can be solved by fetching the MAX text_id for this dataset
         # converter need to "remember" the dataset
-        self.df['text_id'] = self.df.index + 1
+        self.df['text_id'] = self.df.index + self.start_text_id
+        self.start_text_id += len(self.df)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
         table_text['source_id'] = self.max_source_id
         table_text['language_id'] = self.max_language_id

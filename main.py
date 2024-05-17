@@ -35,12 +35,22 @@ data_folder = "./data"
 config = final_config(config_path, data_folder)
 for index, row in config.iterrows():
     file_names = row['dataset_file_name'].split(', ')
-
+    first_iter = True
+    converter = None
+    formatted_df = None
     for file_name in file_names:
         full_path = data_folder + '/' + file_name.strip()
         df = read_dataframe(full_path)
-        converter = DataFrameConverter(row, df, conn)
-        formatted_df = converter.format_for_sql()
+        # create a new converter in the first iter
+        if first_iter:
+            # print(file_name, "first")
+            converter = DataFrameConverter(row, df, conn)
+            formatted_df = converter.format_for_sql()
+            first_iter = False
+        else:
+            # print(file_name, "else")
+            new_formatted_df = converter.format_for_sql(append=True)
+            formatted_df = {key: pd.concat([formatted_df[key], new_formatted_df[key]], ignore_index=True) for key in formatted_df.keys()}
         # for table_name, df in formatted_df.items():
             # print(f"TABLE {table_name}:\n{df}")
             # print("\n")
