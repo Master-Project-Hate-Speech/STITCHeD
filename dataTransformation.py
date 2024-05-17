@@ -40,44 +40,48 @@ class DataFrameConverter:
         table_schema = pd.DataFrame(data)
         self.formatted_df['schema'] = table_schema
     def __format_source(self):
+        text_source_data = {
+            "source_id": [],
+            'source': []
+        }
         if self.config['source'].startswith('@'):
             source = self.config['source'][1:]
             source_id = self.__search_source_rowid(source)
-            text_source_data = {
-                "source_id": [source_id],
-                'source': [source]
-            }
+            if source_id > self.max_source_id:
+                self.max_source_id = source_id
+                text_source_data['source_id'].append(source_id)
+                text_source_data['source'].append(source)
         # for a source col, fetch row_id by row
         else:
             source_col =self.df[self.config['source']]
-            text_source_data = {
-                "source_id": [],
-                'source': []
-            }
             for source in source_col:
                 source_id = self.__search_source_rowid(source)
-                text_source_data['source_id'].append(source_id)
-                text_source_data['source'].append(source)
+                if source_id > self.max_source_id:
+                    self.max_source_id = source_id
+                    text_source_data['source_id'].append(source_id)
+                    text_source_data['source'].append(source)
         text_source_df = pd.DataFrame(text_source_data)
         self.formatted_df['text_source'] = text_source_df
     def __format_language(self):
+        language_data = {
+            "language_id": [],
+            'language': []
+        }
         if self.config['language'].startswith('@'):
             language = self.config['language'][1:]
             language_id = self.__search_language_rowid(language)
-            language_data = {
-                "language_id": [language_id],
-                'language': [language]
-            }
-        else:
-            language_col =self.df[self.config['language']]
-            language_data = {
-                "language_id": [],
-                'language': []
-            }
-            for language in language_col:
-                language_id = self.__search_language_rowid(language)
+            if language_id > self.max_language_id:
+                self.max_language_id = language_id
                 language_data['language_id'].append(language_id)
                 language_data['language'].append(language)
+        else:
+            language_col =self.df[self.config['language']]
+            for language in language_col:
+                language_id = self.__search_language_rowid(language)
+                if language_id > self.max_language_id:
+                    self.max_language_id = language_id
+                    language_data['language_id'].append(language_id)
+                    language_data['language'].append(language)
         language_df = pd.DataFrame(language_data)
         self.formatted_df['language'] = language_df
     def __format_text(self):
@@ -122,9 +126,10 @@ class DataFrameConverter:
             return source_id[0]
         # create new source_id
         else:
-            self.max_source_id += 1
-            self.source_cache[source] = self.max_source_id
-            return self.max_source_id
+            # instead of increasing self.max_source_id here,
+            # put the logic outside so that the table can be adjusted
+            self.source_cache[source] = self.max_source_id + 1
+            return self.source_cache[source]
     def __search_language_rowid(self, language):
         # first check the dic
         if language in self.language_cache:
@@ -138,9 +143,8 @@ class DataFrameConverter:
             return language_id[0]
         # create new
         else:
-            self.max_language_id += 1
-            self.language_cache[language] = self.max_language_id
-            return self.max_language_id
+            self.language_cache[language] = self.max_language_id + 1
+            return self.language_cache[language]
     def __get_rowid(self, table_name):
         '''Get the ID of the last inserted record in the specified table'''
         c = self.conn.cursor()
