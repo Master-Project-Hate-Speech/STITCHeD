@@ -6,9 +6,10 @@ import json
 def strip_comma_from_text_list(orig_list):
     res = []
     for val in orig_list:
-        if ',' in val:
+        # if ',' in val:
+        if ';' in val:
             # Split the string by comma
-            strip_list = [item.strip() for item in val.split(',') if item.strip()]
+            strip_list = [item.strip() for item in val.split(';') if item.strip()]
             res = res + strip_list
         else:
             # If no commas, keep the string as is
@@ -46,7 +47,8 @@ def read_dataframe(file_path):
 
 def read_and_prepare_config(filepath):
     """Reads the configuration CSV file and prepares the dataframe."""
-    df_config = pd.read_csv(filepath, sep=';', encoding="utf-8")
+    # df_config = pd.read_csv(filepath, sep=';', encoding="utf-8")
+    df_config = pd.read_csv(filepath, encoding="utf-8")
     df_config = df_config.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
     df_config['label_name_definition'] = df_config['label_name_definition'].apply(lambda x: json.loads(x))
     return df_config
@@ -71,8 +73,9 @@ def validate_datasets(df_config, folder_path):
             col_list = list(row['label_name_definition'].keys()) + [row['text']]
             if not row['language'].startswith('@'):
                 col_list.append(row['language'])
-            if not row['source'].startswith('@'):
-                col_list.append(row['source'])
+            if isinstance(row['source'], str):
+                if not row['source'].startswith('@'):
+                    col_list.append(row['source'])
 
             is_columns_in_datasets(df, col_list)
             print(col_list)
@@ -85,11 +88,16 @@ def final_config(config_path, data_folder):
 
 
 # config_path = "config.csv"
-# data_folder = "./data"
-# aaa = final_config(config_path, data_folder)
+config_path = "config_new.csv"
+data_folder = "./data"
+aaa = final_config(config_path, data_folder)
 
-
-
+# To convert .parquet to .csv
+# import datasets 
+# dataset = datasets.load_dataset('ucberkeley-dlab/measuring-hate-speech', 'binary')   
+# df = dataset['train'].to_pandas()
+# df.describe()
+# df.to_csv('measuring-hate-speech.csv', index = False)
 
 
 
