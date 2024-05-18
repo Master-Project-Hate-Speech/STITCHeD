@@ -34,7 +34,7 @@ data_folder = "./data"
 
 config = final_config(config_path, data_folder)
 for index, row in config.iterrows():
-    file_names = row['dataset_file_name'].split(', ')
+    file_names = row['dataset_file_name'].split(';')
     first_iter = True
     converter = None
     formatted_df = None
