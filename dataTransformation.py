@@ -112,13 +112,14 @@ class DataFrameConverter:
         table_text['language_id'] = self.max_language_id
         self.formatted_df['text'] = table_text
     def __format_label(self):
-        table_label = pd.DataFrame(columns = ['dataset_id', 'text_id', 'label_name', 'label_value'])
-        for col in self.label_columns:
+        table_label = pd.DataFrame(columns = ['dataset_id', 'text_id', 'label_name', 'label_value', 'label_definition'])
+        for col, col_def in self.config['label_name_definition'].items():
             label_value_pair = {
                 'dataset_id': self.df['dataset_id'].values,
                 'text_id': self.df['text_id'].values,
                 'label_name': [col] * len(self.df),
-                'label_value': self.df[col].values
+                'label_value': self.df[col].values,
+                'label_definition': [col_def] * len(self.df)
             }
             temp_df = pd.DataFrame(label_value_pair)
             table_label = pd.concat([table_label, temp_df], axis=0, ignore_index=True)
