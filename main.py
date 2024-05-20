@@ -29,7 +29,7 @@ def insert_data(conn, df, table_name):
 
 from readConfig import final_config
 from readConfig import read_dataframe
-config_path = "config.csv"
+config_path = "config_new.csv"
 data_folder = "./data"
 
 config = final_config(config_path, data_folder)

@@ -78,7 +78,6 @@ def validate_datasets(df_config, folder_path):
                     col_list.append(row['source'])
 
             is_columns_in_datasets(df, col_list)
-            print(col_list)
 
 def final_config(config_path, data_folder):
     df_config = read_and_prepare_config(config_path)
@@ -90,7 +89,7 @@ def final_config(config_path, data_folder):
 # config_path = "config.csv"
 config_path = "config_new.csv"
 data_folder = "./data"
-aaa = final_config(config_path, data_folder)
+# aaa = final_config(config_path, data_folder)
 
 # To convert .parquet to .csv
 # import datasets 
