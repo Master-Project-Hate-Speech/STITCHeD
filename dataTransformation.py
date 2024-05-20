@@ -108,9 +108,23 @@ class DataFrameConverter:
         # print(len(self.df))
         self.start_text_id += len(self.df)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
-        table_text['source_id'] = self.max_source_id
-        table_text['language_id'] = self.max_language_id
-        self.formatted_df['text'] = table_text
+        if len(self.formatted_df['text_source']) == 1:
+            table_text['source_id'] = self.formatted_df['text_source'].iloc[0]["source_id"]
+        elif len(self.formatted_df['text_source']) == 0:
+            table_text['source_id'] = [self.max_source_id] * len(table_text)
+        else:
+            table_text = pd.merge(table_text, self.formatted_df['text_source'], left_on= self.config['source'],right_on = "source", how='left')
+
+        if len(self.formatted_df['language']) == 1:
+            table_text['language_id'] = self.formatted_df['language'].iloc[0]["language_id"]
+        elif len(self.formatted_df['text_source']) == 0:
+            table_text['language_id'] = [self.max_language_id] * len(table_text)
+        else:
+            table_text = pd.merge(table_text, self.formatted_df['language'], left_on= self.config['language'],right_on = "source", how='left')
+
+
+        self.formatted_df['text'] = table_text[['dataset_id', 'text_id', 'text','source_id','language_id']]
+
     def __format_label(self):
         table_label = pd.DataFrame(columns = ['dataset_id', 'text_id', 'label_name', 'label_value', 'label_definition'])
         for col, col_def in self.config['label_name_definition'].items():
