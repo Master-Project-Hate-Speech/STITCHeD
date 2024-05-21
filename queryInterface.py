@@ -1,4 +1,6 @@
 import sqlite3
+import csv
+import os
 class QueryInterface:
     def __init__(self, conn):
         self.conn = conn
@@ -26,12 +28,24 @@ class QueryInterface:
             '''
         column_names, result = self.fetchall(query)
         if save_to is not None:
-            with open(save_to, 'w', encoding='utf-8') as f:
-                f.write('\t'.join(column_names) + '\n')
-                for row in result:
-                    # deal with None value
-                    row = [str(item) if item is not None else '' for item in row]
-                    f.write('\t'.join(row) + '\n')
+            _, file_extension = os.path.splitext(save_to)
+            if file_extension == '.csv':
+                with open(save_to, 'w', newline='', encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(column_names)
+                    for row in result:
+                        # deal with None value
+                        row = [str(item) if item is not None else '' for item in row]
+                        writer.writerow(row)
+            elif file_extension.lower() == '.tsv':
+                with open(save_to, 'w', encoding='utf-8') as f:
+                    f.write('\t'.join(column_names) + '\n')
+                    for row in result:
+                        # deal with None value
+                        row = [str(item) if item is not None else '' for item in row]
+                        f.write('\t'.join(row) + '\n')
+            else:
+                raise ValueError("Unsupported file extension. Please use .csv or .tsv")
         return column_names, result[:show_lines]
     def close(self):
         self.conn.close()
