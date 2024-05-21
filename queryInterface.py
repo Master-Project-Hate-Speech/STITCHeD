@@ -30,7 +30,7 @@ class QueryInterface:
         if save_to is not None:
             _, file_extension = os.path.splitext(save_to)
             if file_extension == '.csv':
-                with open(save_to, 'w', encoding='utf-8') as f:
+                with open(save_to, 'w', newline='', encoding='utf-8') as f:
                     writer = csv.writer(f)
                     writer.writerow(column_names)
                     for row in result:
