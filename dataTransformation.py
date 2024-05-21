@@ -117,10 +117,10 @@ class DataFrameConverter:
 
         if len(self.formatted_df['language']) == 1:
             table_text['language_id'] = self.formatted_df['language'].iloc[0]["language_id"]
-        elif len(self.formatted_df['text_source']) == 0:
+        elif len(self.formatted_df['language']) == 0:
             table_text['language_id'] = [self.max_language_id] * len(table_text)
         else:
-            table_text = pd.merge(table_text, self.formatted_df['language'], left_on= self.config['language'],right_on = "source", how='left')
+            table_text = pd.merge(table_text, self.formatted_df['language'], left_on= self.config['language'],right_on = 'language', how='left')
 
 
         self.formatted_df['text'] = table_text[['dataset_id', 'text_id', 'text','source_id','language_id']]
