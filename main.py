@@ -60,10 +60,3 @@ if __name__ == '__main__':
             #     print(f"An error occurred: {e}")
 
     read_all_tables(conn)
-
-    print('All tables inserted')
-    query = QueryInterface(conn)
-    result = query.get_dataset_text_labels()
-    display_query_results(result)
-    result = query.get_dataset_text_labels(metadata=True)
-    display_query_results(result)
