@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import json
-
+import argparse
 
 def strip_comma_from_text_list(orig_list):
     res = []
@@ -91,6 +91,13 @@ config_path = "config_new.csv"
 data_folder = "./data"
 # aaa = final_config(config_path, data_folder)
 
+def main():
+    parser = argparse.ArgumentParser(description= "Command line checking config legitimacy")
+    parser.add_argument("--config_path", type=str, required=True, help="Path to config file")
+    parser.add_argument("--data_folder_path", type=str, required=True, help="Path to data folder")
+    args = parser.parse_args()
+
+    final_config(args.config_path, args.data_folder_path)
 # To convert .parquet to .csv
 # import datasets 
 # dataset = datasets.load_dataset('ucberkeley-dlab/measuring-hate-speech', 'binary')   
@@ -109,7 +116,12 @@ data_folder = "./data"
 # folder_path_file_names = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
 # folder_path_file_names
 
-
+if __name__ == "__main__":
+    '''
+    CommandLine:
+    python readConfig.py --config_path config_new.csv --data_folder_path ./data
+    '''
+    main()
 
 # config_file_name_value = df_config.dataset_file_name.tolist()
 
