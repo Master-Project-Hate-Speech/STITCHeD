@@ -108,20 +108,15 @@ class DataFrameConverter:
         # print(len(self.df))
         self.start_text_id += len(self.df)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
-        if len(self.formatted_df['text_source']) == 1:
-            table_text['source_id'] = self.formatted_df['text_source'].iloc[0]["source_id"]
-        elif len(self.formatted_df['text_source']) == 0:
-            table_text['source_id'] = [self.max_source_id] * len(table_text)
+        if self.config['source'].startswith('@'):
+            table_text['source_id'] = [self.language_cache.get(self.config['source'][1:])] * len(table_text)
         else:
-            table_text = pd.merge(table_text, self.formatted_df['text_source'], left_on= self.config['source'],right_on = "source", how='left')
+            table_text['source_id'] = self.formatted_df[self.config['source']].apply(lambda x: self.source_cache.get(x, 'n.a.'))
 
-        if len(self.formatted_df['language']) == 1:
-            table_text['language_id'] = self.formatted_df['language'].iloc[0]["language_id"]
-        elif len(self.formatted_df['language']) == 0:
-            table_text['language_id'] = [self.max_language_id] * len(table_text)
+        if self.config['language'].startswith('@'):
+            table_text['language_id'] = [self.language_cache.get(self.config['language'][1:])] * len(table_text)
         else:
-            table_text = pd.merge(table_text, self.formatted_df['language'], left_on= self.config['language'],right_on = 'language', how='left')
-
+            table_text['language_id'] = self.formatted_df[self.config['language']].apply(lambda x: self.language_cache.get(x, 'n.a.'))
 
         self.formatted_df['text'] = table_text[['dataset_id', 'text_id', 'text','source_id','language_id']]
 
