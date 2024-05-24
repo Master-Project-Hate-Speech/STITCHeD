@@ -1,3 +1,5 @@
+import argparse
+
 import pandas as pd
 from dataTransformation import DataFrameConverter
 from sqlite_setup import create_tables
@@ -16,15 +18,7 @@ def insert_data(conn, df, table_name):
     # except Exception as e:
     #     print(f"TABLE {table_name}:\n{df}")
     #     print(e)
-
-from readConfig import final_config
-from readConfig import read_dataframe
-
-if __name__ == '__main__':
-    config_path = "config_new.csv"
-    data_folder = "./data"
-
-    config = final_config(config_path, data_folder)
+def storage_datasets(config):
     for index, row in config.iterrows():
         file_names = row['dataset_file_name'].split(';')
         first_iter = True
@@ -49,6 +43,43 @@ if __name__ == '__main__':
             for table_name, df in formatted_df.items():
                 insert_data(conn, df, table_name)
                 conn.commit()
+
+            print(f"{file_name} Insertion Complete")
+
+from readConfig import final_config
+from readConfig import read_dataframe
+
+if __name__ == '__main__':
+    config_path = "config_new.csv"
+    data_folder = "./data"
+
+    parser = argparse.ArgumentParser(description= "Command line checking config legitimacy and store into database")
+
+    parser.add_argument("--config_path", type=str, required=True, help="Path to config file")
+    parser.add_argument("--data_folder_path", type=str, required=True, help="Path to data folder")
+
+    parser.add_argument("--insert_db", action='store_true', help="Insert datasets into db after check-up")
+
+    args = parser.parse_args()
+
+    config = final_config(args.config_path, args.data_folder_path)
+    # config = final_config("config_new.csv", "./data")
+    if args.insert_db:
+        storage_datasets(config)
+
+    # Print the arguments to demonstrate
+    print(f"Config Path: {args.config_path}")
+    print(f"Data Folder: {args.data_folder_path}")
+    print(f"Insert Flag: {args.insert_db}")
+
+    '''
+        CommandLine:
+        Check the config AND Save into db if successful:
+            python main.py --config_path config_new.csv --data_folder_path ./data --insert_db
+        Check the config:
+            python main.py --config_path config_new.csv --data_folder_path ./data
+    '''
+
             # try:
             #     df = read_dataframe(full_path)
             #     converter = DataFrameConverter(row, df, conn)
@@ -58,5 +89,4 @@ if __name__ == '__main__':
             #     print(f"File not found: {full_path}")
             # except Exception as e:
             #     print(f"An error occurred: {e}")
-
-    read_all_tables(conn)
+    # read_all_tables(conn)
