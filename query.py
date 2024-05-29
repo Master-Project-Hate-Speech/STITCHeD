@@ -10,12 +10,12 @@ def display_query_results(column_names, result):
 def setup_get_dataset_text_labels_parser(subparsers):
     parser_get_dataset_text_labels = subparsers.add_parser('get_dataset_text_labels', help='Query the database')
     parser_get_dataset_text_labels.add_argument('--metadata', help='Whether the label definition, text source and language are needed', action='store_true')
-    parser_get_dataset_text_labels.add_argument('--show-lines', type=int, help='Number of lines to show')
+    parser_get_dataset_text_labels.add_argument('--show-lines', type=int, default=10, help='Number of lines to show')
     parser_get_dataset_text_labels.add_argument('--save-to', type=str, help='Path to save the results')
 def setup_query_sql_from_file_parser(subparsers):
     parser_query_sql_from_file = subparsers.add_parser('query_sql_from_file', help='Query the database using a SQL statement')
     parser_query_sql_from_file.add_argument('--read', type=str, help='Path to read the SQL command from')
-    parser_query_sql_from_file.add_argument('--show-lines', type=int, help='Number of lines to show')
+    parser_query_sql_from_file.add_argument('--show-lines', type=int, default=10, help='Number of lines to show')
     parser_query_sql_from_file.add_argument('--save-to', type=str, help='Path to save the results')
 def main():
     # connect to database

@@ -33,7 +33,7 @@ class QueryInterface:
             self.__save_to_tsv(column_names, result, file_path)
         else:
             raise ValueError("Unsupported file extension. Please use .csv or .tsv")
-    def get_dataset_text_labels(self, metadata = False, show_lines = 10, file_path=None):
+    def get_dataset_text_labels(self, show_lines, metadata = False, file_path=None):
         query = '''
         SELECT dataset.dataset_name, text.text, label.label_name, label.label_value
         FROM text
@@ -58,7 +58,7 @@ class QueryInterface:
 
     # assuming that only for queries
     # currently only for one query
-    def query_sql_from_file(self, sql_file, show_lines = 10, file_path=None):
+    def query_sql_from_file(self, sql_file, show_lines, file_path=None):
         try:
             with open(sql_file, 'r', encoding='utf-8') as file:
                 sql_commands = file.read().split(';')
