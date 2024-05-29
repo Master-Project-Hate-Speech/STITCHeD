@@ -25,7 +25,7 @@ def main():
     args = parser.parse_args()
     # process commands
     if args.command == 'get_dataset_text_labels':
-        column_names, result = queryInterface.get_dataset_text_labels(metadata=args.metadata, show_lines=args.show_lines, save_to=args.save_to)
+        column_names, result = queryInterface.get_dataset_text_labels(metadata=args.metadata, show_lines=args.show_lines, file_path=args.save_to)
         display_query_results(column_names, result)
 if __name__ == '__main__':
     '''
