@@ -25,6 +25,14 @@ class QueryInterface:
                 # deal with None value
                 row = [str(item) if item is not None else '' for item in row]
                 f.write('\t'.join(row) + '\n')
+    def __save_query_result(self, column_names, result, file_path):
+        _, file_extension = os.path.splitext(file_path)
+        if file_extension == '.csv':
+            self.__save_to_csv(column_names, result, file_path)
+        elif file_extension.lower() == '.tsv':
+            self.__save_to_tsv(column_names, result, file_path)
+        else:
+            raise ValueError("Unsupported file extension. Please use .csv or .tsv")
     def get_dataset_text_labels(self, metadata = False, show_lines = 10, file_path=None):
         query = '''
         SELECT dataset.dataset_name, text.text, label.label_name, label.label_value
@@ -43,24 +51,26 @@ class QueryInterface:
             '''
         column_names, result = self.__fetchall(query)
         if file_path is not None:
-            _, file_extension = os.path.splitext(file_path)
-            if file_extension == '.csv':
-                self.__save_to_csv(column_names, result, file_path)
-            elif file_extension.lower() == '.tsv':
-                self.__save_to_tsv(column_names, result, file_path)
-            else:
-                raise ValueError("Unsupported file extension. Please use .csv or .tsv")
+            self.__save_query_result(column_names, result, file_path)
         return column_names, result[:show_lines]
+
+
+
     # assuming that only for queries
     # currently only for one query
-    def query_sql_from_file(self,file_path):
-        with open(file_path, 'r', encoding='utf-8') as file:
-            sql_commands = file.read().split(';')
-            sql_commands = [cmd.strip() for cmd in sql_commands if cmd.strip()]
-            # Assert there's exactly one SQL command
-            assert len(sql_commands) == 1, "Invalid file format. Expected exactly one SQL command."
-            sql_command = sql_commands[0]
-            column_names, result = self.__fetchall(sql_command)
-            return column_names, result
+    def query_sql_from_file(self, sql_file, show_lines = 10, file_path=None):
+        try:
+            with open(sql_file, 'r', encoding='utf-8') as file:
+                sql_commands = file.read().split(';')
+                sql_commands = [cmd.strip() for cmd in sql_commands if cmd.strip()]
+                # Assert there's exactly one SQL command
+                assert len(sql_commands) == 1, "Invalid file format. Expected exactly one SQL command."
+                sql_command = sql_commands[0]
+                column_names, result = self.__fetchall(sql_command)
+                if file_path is not None:
+                    self.__save_query_result(column_names, result, file_path)
+                return column_names, result[:show_lines]
+        except Exception as e:
+            print("An error occurred while executing the SQL query:", str(e))
     def close(self):
         self.conn.close()
