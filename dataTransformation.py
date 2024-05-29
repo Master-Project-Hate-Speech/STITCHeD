@@ -133,6 +133,7 @@ class DataFrameConverter:
             temp_df = pd.DataFrame(label_value_pair)
             table_label = pd.concat([table_label, temp_df], axis=0, ignore_index=True)
         self.formatted_df['label'] = table_label
+        assert self.formatted_df['label'].shape[0] == self.formatted_df['text'].shape[0] * len(self.config['label_name_definition'].items())
     def __search_source_rowid(self, source):
         # first check the dic, which consists of
         # #1.existing source-id pairs that have been queried
