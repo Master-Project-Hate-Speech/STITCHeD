@@ -48,7 +48,7 @@ def read_dataframe(file_path):
 def read_and_prepare_config(filepath):
     """Reads the configuration CSV file and prepares the dataframe."""
     # df_config = pd.read_csv(filepath, sep=';', encoding="utf-8")
-    df_config = pd.read_csv(filepath, encoding="utf-8")
+    df_config = pd.read_csv(filepath, encoding="utf-8",encoding_errors='replace')
     df_config = df_config.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
     df_config['label_name_definition'] = df_config['label_name_definition'].apply(lambda x: json.loads(x))
     return df_config
