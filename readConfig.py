@@ -34,7 +34,7 @@ def read_dataframe(file_path):
     """
     if file_path.endswith('.csv'):
         # Read CSV file
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, encoding_errors='replace')
     elif file_path.endswith('.tsv'):
         # Read TSV file
         df = pd.read_csv(file_path, sep='\t')
