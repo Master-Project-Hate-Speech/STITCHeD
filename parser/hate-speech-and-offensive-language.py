@@ -1,6 +1,6 @@
 import pandas as pd
-original_file_path = 'H:\\UZH\\Master Project\\Data-Pipeline\\original_data\\'
-file_path = 'H:\\UZH\\Master Project\\Data-Pipeline\\data\\'
+original_file_path = '.\\original_data\\'
+file_path = '.\\data\\'
 
 df = pd.read_csv(original_file_path + 'labeled_data.csv')
 replace_values = {1: 'hate_speech', 2: 'offensive_language', 0: 'neither'}
