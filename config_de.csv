@@ -1,0 +1,2 @@
+dataset_file_name,dataset_name,label_name_definition,source,language,text
+RP-Mod.csv,RP-Mod,{"label": ""} ,@Rheinische Post,@ger,text 
