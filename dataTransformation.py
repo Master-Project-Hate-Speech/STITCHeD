@@ -109,14 +109,14 @@ class DataFrameConverter:
         self.start_text_id += len(self.df)
         table_text = self.df[['dataset_id', 'text_id', 'text']].drop_duplicates()
         if self.config['source'].startswith('@'):
-            table_text['source_id'] = [self.language_cache.get(self.config['source'][1:])] * len(table_text)
+            table_text['source_id'] = [self.source_cache.get(self.config['source'][1:])] * len(table_text)
         else:
-            table_text['source_id'] = self.formatted_df[self.config['source']].apply(lambda x: self.source_cache.get(x, 'n.a.'))
+            table_text['source_id'] = self.formatted_df['text_source'][self.config['source']].apply(lambda x: self.source_cache.get(x, 'n.a.'))
 
         if self.config['language'].startswith('@'):
             table_text['language_id'] = [self.language_cache.get(self.config['language'][1:])] * len(table_text)
         else:
-            table_text['language_id'] = self.formatted_df[self.config['language']].apply(lambda x: self.language_cache.get(x, 'n.a.'))
+            table_text['language_id'] = self.formatted_df['language'][self.config['language']].apply(lambda x: self.language_cache.get(x, 'n.a.'))
 
         self.formatted_df['text'] = table_text[['dataset_id', 'text_id', 'text','source_id','language_id']]
 

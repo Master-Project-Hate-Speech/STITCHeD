@@ -2,3 +2,4 @@
 /original_data/
 __pycache__/
 *.pyc
+/hate_speech_data.db
