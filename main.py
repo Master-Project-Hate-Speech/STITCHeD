@@ -8,7 +8,7 @@ from delete_data import clear_tables
 import myGlobals
 from queryInterface import QueryInterface
 conn = myGlobals.connect()
-#clear_tables(conn)
+clear_tables(conn)
 create_tables(conn)
 
 def insert_data(conn, df, table_name):
