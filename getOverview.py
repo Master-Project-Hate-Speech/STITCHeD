@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def get_overview(db_path, category_field, category_table, count_field, count_table, foreign_key):
+def get_overview(connection, category_field, category_table, count_field, count_table, foreign_key):
     """
         Get an overview of the distribution of one field, e.g. distribution of language on text.
 
@@ -16,9 +16,7 @@ def get_overview(db_path, category_field, category_table, count_field, count_tab
         - Terminal output: table of distribution.
     """
 
-    # Connect to the SQLite database
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    cursor = connection.cursor()
 
     query = f"""
     SELECT 
@@ -48,10 +46,11 @@ def get_overview(db_path, category_field, category_table, count_field, count_tab
         print("{:<10} | {:<10} | {:<10}%".format(row[0], row[1], row[2]))
 
     # Close the database connection
-    conn.close()
+    connection.close()
 
 
 # %%
 db_path = './hate_speech_data.db'
-get_overview(db_path, 'language','language', 'text','text', 'language_id')
+conn = sqlite3.connect(db_path)
+get_overview(conn, 'language','language', 'text','text', 'language_id')
 # get_overview(db_path, 'source','text_source', 'text','text', 'source_id')
