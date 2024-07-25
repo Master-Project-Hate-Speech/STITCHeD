@@ -1,10 +1,9 @@
 import sqlite3
 from collections import defaultdict
 
-def search_and_count_labels(db_path, keyword):
+def search_and_count_labels(connection, keyword):
     # Connect to the SQLite database
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    cursor = connection.cursor()
     
     # Perform a fuzzy search for rows where label_name and label_definition contain the keyword
     query = """
@@ -36,5 +35,6 @@ def search_and_count_labels(db_path, keyword):
     conn.close()
 #%%
 db_path = './hate_speech_data.db'
+conn = sqlite3.connect(db_path)
 keyword = input("Please enter the keyword: ")
-search_and_count_labels(db_path, keyword)
+search_and_count_labels(conn, keyword)
