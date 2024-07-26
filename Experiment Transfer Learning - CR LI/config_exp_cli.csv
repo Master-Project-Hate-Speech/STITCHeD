@@ -1,0 +1,6 @@
+dataset_file_name,dataset_name,label_name_definition,source,language,text,
+olid-training-v1.0.tsv,OLID19,"{""subtask_a"": ""Level A: Offensive language identification \n- (NOT) Not Offensive - This post does not contain offense or profanity. \n- (OFF) Offensive - This post contains offensive language or a targeted (veiled or direct) offense \n In our annotation, we label a post as offensive (OFF) if it contains any form of non-acceptable language (profanity) or a targeted offense, which can be veiled or direct. "" }",@Twitter,@eng,tweet,
+Dynamically Generated Hate Dataset v0.2.3.csv,DGHD,"{""label"": ""a binary variable, indicating whether or not the content has been identified as hateful. It takes two values: hate, nothate.""}",@N/A,@eng,text,
+measuring-hate-speech.csv,MHS,"{""hate_speech_score"": ""Continuous hate speech measure, where higher = more hateful and lower = less hateful. > 0.5 is approximately hate speech, < -1 is counter or supportive speech, and -1 to +0.5 is neutral or ambiguous ""} ","@YouTube, Twitter, and Reddit",@eng,text,
+Ethos_Dataset_Binary.csv,Ethos,"{""isHate"":""""}",@Multi,@eng,comment,
+edos_labelled_aggregated.csv,EDOS,"{""label_sexist"":""TASK A - Binary Sexism Detection: a two-class (or binary) classification where systems have to predict whether a post is sexist or not sexist."" }","@Gab, @Reddit ",@eng,text,
