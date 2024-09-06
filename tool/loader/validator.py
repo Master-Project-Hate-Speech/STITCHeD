@@ -176,7 +176,7 @@ def validate_config(config_path, data_folder):
 
 
 # config_path = "config.csv"
-config_path = "../../config_new.csv"
+config_path = "../../old_files/config_new.csv"
 data_folder = "./data"
 # aaa = final_config(config_path, data_folder)
 

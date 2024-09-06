@@ -1,6 +1,5 @@
 from tool.loader.formatter import DataFrameFormatter
 from tool.loader.validator import Validator, read_dataframe
-from main import data_folder, conn
 
 class DataLoader:
     def __init__(self, conn, validator):
@@ -34,12 +33,12 @@ class DataLoader:
                 converter = None
                 formatted_df = None
                 for file_name in file_names:
-                    full_path = data_folder + '/' + file_name.strip()
+                    full_path = self.validator.data_folder + '/' + file_name.strip()
                     df = read_dataframe(full_path)
                     # create a new converter in the first iter
                     if first_iter:
                         # print(file_name, "first")
-                        converter = DataFrameFormatter(row, df, conn)
+                        converter = DataFrameFormatter(row, df, self.conn)
                         formatted_df = converter.format_for_sql()
                         first_iter = False
                     else:
@@ -50,7 +49,7 @@ class DataLoader:
                     # print(f"TABLE {table_name}:\n{df}")
                     # print("\n")
                     for table_name, df in formatted_df.items():
-                        self._insert_data(conn, df, table_name)
+                        self._insert_data(self.conn, df, table_name)
                     print(f"{file_name} Insertion Complete")
 
                 # Commit the transaction for this row
