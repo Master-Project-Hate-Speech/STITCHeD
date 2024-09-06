@@ -1,7 +1,7 @@
 import argparse
 
 from tool.database.setup import setupSchema
-import myGlobals
+import sqlite3
 from tool.loader.validator import Validator
 from tool.loader.loader import DataLoader
 
@@ -14,10 +14,11 @@ def parse_arguments():
 
 
 if __name__ == '__main__':
-    conn = myGlobals.connect()
+    path = '.\\hate_speech_data.db'
+    conn = sqlite3.connect(path)
     setupSchema(conn)
 
-    config_path = "config_new.csv"
+    config_path = "old_files/config_new.csv"
     data_folder = "./data"
 
     args = parse_arguments()

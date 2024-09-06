@@ -1,4 +1,3 @@
-import sqlite3
 def read_table(conn, table_name):
     c = conn.cursor()
     # Query the total number of rows in the table
