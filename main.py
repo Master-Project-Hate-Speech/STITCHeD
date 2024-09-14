@@ -2,7 +2,7 @@ import argparse
 
 from tool.database.setup import setupSchema
 import sqlite3
-from tool.loader.validator import Validator
+from tool.loader.validator import ConfigValidator
 from tool.loader.loader import DataLoader
 
 def parse_arguments():
@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     args = parse_arguments()
 
-    validator = Validator(config_file=config_path, data_folder=data_folder)
+    validator = ConfigValidator(config_file=config_path, data_folder=data_folder)
     loader = DataLoader(conn=conn, validator=validator)
 
     if args.insert_db:
