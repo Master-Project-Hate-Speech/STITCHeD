@@ -1,0 +1,3 @@
+dataset_file_name,dataset_name,label_name_definition,source,language,text
+olid-training-v1.0.tsv,OLID19,"{""subtask_a"": """", ""subtask_b"": """", ""subtask_c"": """"}",@Twitter,@eng,tweet
+"SBFv2.tst.csv",SBFv2,"{""intentYN"": """", ""sexYN"": """", ""sexReason"": """", ""offensiveYN"": """"}",@Twitter,@eng,post
