@@ -49,7 +49,7 @@ class DataLoader:
                     # print(f"TABLE {table_name}:\n{df}")
                     # print("\n")
                     for table_name, df in formatted_df.items():
-                        self._insert_data(self.conn, df, table_name)
+                        self._insert_data(df, table_name)
                     print(f"{file_name} Insertion Complete")
 
                 # Commit the transaction for this row
