@@ -7,10 +7,12 @@ Hate speech detection faces challenges due to the diverse manifestations of abus
 The dataset-to-SQLite pipeline is composed of modular components, each responsible for a distinct phase of the data management workflow. This design ensures flexibility, maintainability, and ease of extension across stages like configuration, data insertion, validation, and querying.
 
 `config` **Module**
+
 The `config` module simplifies the process of importing data files (e.g., CSV, TSV) that may not match the target database schema. A configuration file is used to map source file columns to the correct database tables, ensuring smooth integration. This module is built on a base class with an inheritance structure, allowing easy adaptation for future schema changes without breaking compatibility with the validator.
 
 
 `loader` **Module**
+
 The `loader` module is responsible for validating, formatting, and loading datasets into the database. It operates in a structured, phase-based manner:
 
 - **Validator**: Ensures the integrity of the incoming datasets by checking that all required files and columns (as specified in the configuration file) are present. This prevents incomplete or corrupted data from entering the pipeline.
@@ -19,12 +21,14 @@ The `loader` module is responsible for validating, formatting, and loading datas
 
 
 `database` **Module**
+
 The `database` module manages schema setup and data querying to ensure smooth integration and retrieval:
 
 - **Setup**: Creates all database tables in the correct order, maintaining foreign key constraints. It also offers a reset function to clear tables when needed, simplifying schema management.
 - **Querying**: Provides two main interfaces—one for displaying dataset-text-label information (with optional source language details) and another for executing queries from external SQL files. Both include a `show_lines` parameter for previewing rows and support exporting query results to CSV or TSV files.
 
 `utils` **Module**
+
 The `utils` module includes a set of helpful tools for data analysis and selection during the dataset preparation phase:
 
 - **Distribute Tool**: Analyzes the distribution of one column relative to another, helping users identify balanced or imbalanced data points, useful for dataset selection.
