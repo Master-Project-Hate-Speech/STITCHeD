@@ -1,3 +1,0 @@
-dataset_file_name,dataset_name,label_name_definition,source,language,text
-gahd.csv,GAHD,"{""label"": ""0 = not-hate speech, 1 = hate speech""} ",@Multi,@ger,text 
-Dynamically Generated Hate Dataset v0.2.3.csv,DGHD,"{""label"": ""a binary variable, indicating whether or not the content has been identified as hateful. It takes two values: hate, nothate."",""type"":""a categorical variable, providing a secondary label for hateful content. For hate it can take five values: Animosity, Derogation, Dehumanization, Threatening and Support for Hateful Entities. Please see the paper for more detail. For nothate the 'type' is 'none'. In round 1 the 'type' was not given and is marked as 'notgiven'""}",@N/A,@eng,text
