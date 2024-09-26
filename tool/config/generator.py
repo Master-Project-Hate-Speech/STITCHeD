@@ -74,6 +74,11 @@ class Config(ConfigBase):
         # Save the updated DataFrame to the config file
         self.df.to_csv(self.config, index=False)
 
+    def switch_mode(self, mode_name):
+        assert mode_name in ['create', 'append'], "There are only 'create' or 'append' mode"
+        self.mode = mode_name
+        return
+
 # Example usage
 if __name__ == "__main__":
     # Using 'create' mode to initialize the file with a new row
