@@ -1,0 +1,3 @@
+dataset_file_name,dataset_name,label_name_definition,source,language,text
+toy_dataset_1_eng_twitter.csv,toy_data_1,"{""Label1"": ""Definition Label 1"", ""Label2"": ""Definition Label 2""}",@Twitter,@eng,Text
+toy_dataset_2_ger_reddit.csv,toy_data_2,"{""Label"": ""Definition Label""}",@Reddit,@ger,Text
