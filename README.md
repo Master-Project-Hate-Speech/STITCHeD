@@ -20,7 +20,7 @@ Manual for the Config file：
 - `text`: The column name of text.
 
 **Note**:
-1. Only datasets that are in CSV(comma-seperated) or TSV formats are supported.
+Only datasets that are in CSV(comma-seperated) or TSV formats are supported.
 
 
 ```python
