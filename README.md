@@ -80,7 +80,7 @@ config_validator.final_config()
 ```
 
 ## Load Data into Database
-`DataLoader` take two inputs, a `conn` from the established empty database and an instance of `validator`. Its member function of `storage_datasets()` will process and commit the data change to the database.
+`DataLoader` takes two inputs, a `conn` from the established empty database and an instance of `validator`. Its member function of `storage_datasets()` will process and commit the data change to the database.
 
 Set up a database connection
 
